@@ -244,7 +244,7 @@ jobs:
       uses: actions/download-artifact@v4.1.7
       with:
         path: "build"
-        pattern: "*-Win??-Release"
+        pattern: "*-Win*-Release"
         github-token: "${{secrets.GITHUB_TOKEN}}"
 
     - name: Set up build folders
@@ -252,6 +252,7 @@ jobs:
         mkdir -p build/release/OpenALSoft/Documentation
         mkdir -p build/release/OpenALSoft/Win32
         mkdir -p build/release/OpenALSoft/Win64
+        mkdir -p build/release/OpenALSoft/WinArm64
         echo "${{github.repository}}" >>                                                                              "build/release/OpenALSoft/Documentation/Version.txt"
         echo "v${{needs.build.outputs.CommitTag}}-${{needs.build.outputs.CommitHashShort}} ${{github.ref_name}}" >>   "build/release/OpenALSoft/Documentation/Version.txt"
         echo "Commit #${{needs.build.outputs.CommitCount}}" >>                                                        "build/release/OpenALSoft/Documentation/Version.txt"
@@ -262,15 +263,19 @@ jobs:
         curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/BSD-3Clause             -o "build/release/OpenALSoft/Documentation/License_BSD-3Clause.txt"
         curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/LICENSE-pffft           -o "build/release/OpenALSoft/Documentation/License_PFFFT.txt"
         curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/alsoftrc.sample         -o "build/release/OpenALSoft/Win32/alsoft.ini"
-        curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/alsoftrc.sample         -o "build/release/OpenALSoft/Win64/alsoft.ini"
+        cp "build/release/OpenALSoft/Win32/alsoft.ini"                                                                "build/release/OpenALSoft/Win64/alsoft.ini"
+        cp "build/release/OpenALSoft/Win32/alsoft.ini"                                                                "build/release/OpenALSoft/WinArm64/alsoft.ini"
         curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/logging/log.cmd         -o "build/release/OpenALSoft/Win32/log.cmd"
-        curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/logging/log.cmd         -o "build/release/OpenALSoft/Win64/log.cmd"
+        cp "build/release/OpenALSoft/Win32/log.cmd"                                                                   "build/release/OpenALSoft/Win64/log.cmd"
+        cp "build/release/OpenALSoft/Win32/log.cmd"                                                                   "build/release/OpenALSoft/WinArm64/log.cmd"
         cp "build/soft_oal-Win32-Release/soft_oal.dll"                                                                "build/release/OpenALSoft/Win32/OpenAL32.dll"
         cp "build/soft_oal-Win64-Release/soft_oal.dll"                                                                "build/release/OpenALSoft/Win64/OpenAL32.dll"
+        cp "build/soft_oal-WinArm64-Release/soft_oal.dll"                                                             "build/release/OpenALSoft/WinArm64/OpenAL32.dll"
         cp -r "build/release/OpenALSoft"                                                                              "build/release/OpenALSoft+HRTF"
         cp "build/release/OpenALSoft+HRTF/Win32/alsoft.ini"                                                           "build/release/OpenALSoft+HRTF/Documentation/alsoft.ini"
         curl https://raw.githubusercontent.com/${{github.repository}}/${{github.ref_name}}/configs/HRTF/alsoft.ini -o "build/release/OpenALSoft+HRTF/Win32/alsoft.ini"
         cp "build/release/OpenALSoft+HRTF/Win32/alsoft.ini"                                                           "build/release/OpenALSoft+HRTF/Win64/alsoft.ini"
+        cp "build/release/OpenALSoft+HRTF/Win32/alsoft.ini"                                                           "build/release/OpenALSoft+HRTF/WinArm64/alsoft.ini"
 
     - name: Compress artifacts
       run: |

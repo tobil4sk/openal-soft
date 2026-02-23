@@ -70,6 +70,30 @@ jobs:
             build_type: "Release"
           }
         - {
+            name: "WinArm64-Release",
+            os: windows-11-arm,
+            cmake_opts: "-A ARM64 \
+              -DALSOFT_TESTS=ON \
+              -DALSOFT_BUILD_ROUTER=ON \
+              -DALSOFT_REQUIRE_WINMM=ON \
+              -DALSOFT_REQUIRE_DSOUND=ON \
+              -DALSOFT_REQUIRE_WASAPI=ON",
+            build_type: "Release"
+          }
+        - {
+            name: "WinArm64-Debug",
+            os: windows-11-arm,
+            cmake_opts: "-A ARM64 \
+              -DALSOFT_TESTS=ON \
+              -DALSOFT_BUILD_ROUTER=ON \
+              -DALSOFT_REQUIRE_WINMM=ON \
+              -DALSOFT_REQUIRE_DSOUND=ON \
+              -DALSOFT_REQUIRE_WASAPI=ON \
+              -DFORCE_STATIC_VCRT=ON \
+              -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDebug",
+            build_type: "Debug"
+          }
+        - {
             name: "macOS-Release",
             os: macos-15,
             cmake_opts: "-DALSOFT_REQUIRE_COREAUDIO=ON \
